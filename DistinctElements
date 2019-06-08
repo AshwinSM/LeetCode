@@ -1,0 +1,29 @@
+package com.distinctElements;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class DistinctElements {
+
+	public static void main(String[] args) {
+		String inputString = "distinctelements";
+		int maxSize= 0;
+		char[] array = inputString.toCharArray();
+		Map<Character, Integer> map = new HashMap<Character, Integer>();
+		int startIndex = 0;
+		for(int i=0 ;i<array.length;i++) {
+			if(map.containsKey(array[i]))  {
+				int j;
+				for(j =startIndex;array[j] != array[i];j++) {
+					map.remove(array[j]);
+				}
+				startIndex = j+1;
+			}
+			else 
+				map.put(array[i], 1);
+			if(map.size()>maxSize)
+				maxSize = map.size();
+		}
+		System.out.println("Length of Longest Distinct SubString is "+ maxSize );
+	}
+}
