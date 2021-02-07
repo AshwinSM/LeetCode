@@ -1,0 +1,47 @@
+class MinStack {
+
+    private int stack[][];
+	private int minNum = -1;
+	private int top = -1;
+	
+	public MinStack() {
+        stack = new int[10000][2];
+    }
+    
+    public void push(int x) {
+        stack[++top][0] = x;
+        if(top == 0 || minNum > x) {
+        	stack[top][1] = x;
+        	minNum = x;
+        }else {
+        	stack[top][1] = minNum;
+        }
+    }
+    
+    public void pop() {
+        int index = top == 0 ? top : top-1;
+        if(top != 0){
+            minNum = stack[index][1];
+        }
+    	
+    	top--;
+    }
+    
+    public int top() {
+        return stack[top][0];
+    }
+    
+    public int getMin() {
+    	return stack[top][1];
+    }
+	
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
