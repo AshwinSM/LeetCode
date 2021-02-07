@@ -1,0 +1,62 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+         if(k == 1) {
+			 return head;
+		 }
+		 ListNode tempHead = head;
+		 ListNode temp = head,nextNode, firstNode, prevEndNode= null;
+		 ListNode nextStartNode = head;
+		 boolean firstHead = true;
+		 boolean lastSwap = false;
+		 while(nextStartNode != null) {
+			 tempHead = nextStartNode;
+			 for(int i=0;i<k && nextStartNode!= null;i++) {
+				 if(nextStartNode.next != null) {
+					 nextStartNode = nextStartNode.next;
+				 } else if(i+1 == k) {
+					 lastSwap = true;
+				 }else {
+					 nextStartNode = null; 
+				 }
+			 }
+			 
+			 if(nextStartNode == null)
+				 return head;
+			 firstNode = tempHead;
+			 nextNode = tempHead.next;
+			 while(nextNode != nextStartNode || (lastSwap == true)) {
+				 temp = nextNode;
+				 if(temp.next != null) {
+					 firstNode.next = temp.next;
+				 }else {
+					 firstNode.next = null;
+					 nextStartNode = null;
+					 lastSwap = false;
+				 }
+				 temp.next = tempHead;
+				 nextNode = firstNode.next;
+				 tempHead = temp;
+			 }
+			 if(prevEndNode != null) {
+				 prevEndNode.next =  tempHead;
+			 }
+			 prevEndNode = firstNode;
+			 if(firstHead == true) {
+				 head = tempHead;
+				 firstHead = false;
+			 }
+		 }
+		 
+		 return head;
+    }
+}
