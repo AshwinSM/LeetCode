@@ -1,0 +1,31 @@
+class Solution {
+    public String convert(String s, int numRows) {
+        char[] stringArr = s.toCharArray();
+        int n = numRows;
+		int upIndex = n != 1 ? n+(n-2) : 0;
+		int downIndex = 0;
+        StringBuilder sb = new StringBuilder();
+		
+		for(int i=0;i<n;i++) {
+			for(int j=i;j<s.length();) {
+				if(j == i || (upIndex == 0 && downIndex == 0)) {
+                    sb.append(stringArr[j]);
+				}
+				j+=upIndex;
+				if(upIndex != 0  && j < s.length()) {
+                     sb.append(stringArr[j]);
+				}
+				j+=downIndex;
+				if(downIndex != 0 && j < s.length()) {
+					 sb.append(stringArr[j]);
+				}
+				if(upIndex == 0 && downIndex == 0) {
+					j++;
+				}
+			}
+			upIndex-=2;
+			downIndex+=2;
+		}
+        return sb.toString();
+    }
+}
