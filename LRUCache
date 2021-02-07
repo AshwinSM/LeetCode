@@ -1,0 +1,79 @@
+class LRUCache {
+    
+    private Map lruCacheMap,keyVSOrderMap,orderVSKeyMap;
+	private Integer latestId = 0,oldestId = 0;
+	private Integer capacity;
+	
+
+    public LRUCache(Integer capacity) {
+        this.capacity = capacity;
+		lruCacheMap = new HashMap<Integer, Integer>(capacity);
+		keyVSOrderMap = new HashMap<Integer, Integer>(capacity);
+		orderVSKeyMap = new HashMap<Integer, Integer>(capacity); 
+    }
+    
+    public int get(int key) {
+        if(lruCacheMap.containsKey(key)) {
+			if(keyVSOrderMap.get(key) != latestId) {
+				Integer orderId = (Integer) keyVSOrderMap.get(key);
+				keyVSOrderMap.put(key, ++latestId);
+				orderVSKeyMap.remove(orderId);
+				orderVSKeyMap.put(latestId, key);
+			}
+			return (Integer)lruCacheMap.get(key);
+		}
+		return -1;
+    }
+    
+    public void put(int key, int value) {
+		if(lruCacheMap.size() < this.capacity) {
+			if(latestId == 0 && oldestId == 0) {
+				++oldestId;
+			}
+			if(lruCacheMap.containsKey(key)) {
+				lruCacheMap.put(key, value);
+				if(keyVSOrderMap.get(key) != latestId) {
+					Integer orderId = (Integer) keyVSOrderMap.get(key);
+					keyVSOrderMap.put(key, ++latestId);
+					orderVSKeyMap.remove(orderId);
+					orderVSKeyMap.put(latestId, key);
+				}
+				return;
+			}else {
+			lruCacheMap.put(key, value);
+			keyVSOrderMap.put(key, ++latestId);
+			orderVSKeyMap.put(latestId, key);
+			}
+		}else {
+			if(lruCacheMap.containsKey(key)) {
+				lruCacheMap.put(key, value);
+				if(keyVSOrderMap.get(key) != latestId) {
+					Integer orderId = (Integer) keyVSOrderMap.get(key);
+					keyVSOrderMap.put(key, ++latestId);
+					orderVSKeyMap.remove(orderId);
+					orderVSKeyMap.put(latestId, key);
+				}
+				return;
+			}
+			Integer oldestKey = (Integer) orderVSKeyMap.get(oldestId);
+			if(oldestKey == null) {
+				while(oldestKey == null && oldestId <= latestId) {
+					oldestKey =  (Integer)orderVSKeyMap.get(++oldestId);
+				}
+			}
+			lruCacheMap.remove(oldestKey);
+			lruCacheMap.put(key, value);
+			keyVSOrderMap.remove(oldestKey); 
+			keyVSOrderMap.put(key, ++latestId);
+			orderVSKeyMap.remove(oldestId);
+			orderVSKeyMap.put(latestId, key);
+		}
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
