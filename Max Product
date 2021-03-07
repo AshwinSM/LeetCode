@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int maxx = INT_MIN, product = 1;
+        
+        for(int i : nums) {
+            product *= i;
+            maxx = max(maxx, product);
+            if(product == 0) product = 1;
+        }
+        
+        product = 1;
+        for(int i=nums.size()-1; i>=0; i--) {
+            product *= nums[i];
+            maxx = max(maxx, product);
+            if(product == 0) product = 1;
+        }
+        
+        return maxx;
+    }
+};
