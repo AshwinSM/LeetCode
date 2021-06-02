@@ -1,0 +1,22 @@
+class Solution {
+    public int firstUniqChar(String s) {
+		int[] alphaArr = new int[26];
+		char[] charArr = s.toLowerCase().toCharArray();
+		
+		for(int i=0;i<charArr.length; i++) {
+			int ascii = charArr[i]-97;
+			if(alphaArr[ascii] == 0 && alphaArr[ascii] != -1) {
+				alphaArr[ascii] = i+1;
+			}else {
+				alphaArr[ascii] = -1;
+			}
+		}
+		int uniqueCharacterPos = s.length()+1;
+		for(int i=0;i<26;i++) {
+			if(alphaArr[i]>0 && alphaArr[i]<uniqueCharacterPos) {
+				uniqueCharacterPos = alphaArr[i];
+			}
+		}
+        return uniqueCharacterPos == s.length()+1 ? -1 : uniqueCharacterPos-1;
+    }
+}
